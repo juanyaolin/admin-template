@@ -6,6 +6,13 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
+const DotEnv = require('dotenv');
+
+if ((parsedEnv = DotEnv.config().parsed)) {
+  for (let key in parsedEnv) {
+    process.env[key] = parsedEnv[key];
+  }
+}
 
 module.exports = function(/* ctx */) {
   return {
@@ -72,7 +79,13 @@ module.exports = function(/* ctx */) {
     devServer: {
       https: false,
       port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically,
+      proxy: {
+        '/api': {
+          target: process.env.API_URL,
+          changeOrigin: true
+        }
+      }
     },
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
